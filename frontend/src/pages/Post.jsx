@@ -7,7 +7,7 @@ const Post = () => {
   const id = params.get("userId");
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDataPresent, setIsDataPresent] = useState(true);
+  const [isDataPresent, setIsDataPresent] = useState(false);
   const [error, setError] = useState(null);
   const [alert, setAlert] = useState(false);
   const [userId] = useState(id);
@@ -33,8 +33,8 @@ const Post = () => {
   const addBulk = async () => {
     try {
       let payload = { userId: userId, posts: data };
-      let res = await axios.post(baseUrl, payload);
-      console.log(res.data);
+      let res = await axios.post(`${baseUrl}/add`, payload);
+      console.log(res);
       setAlert(true);
     } catch (error) {
       console.log(error);
@@ -110,11 +110,19 @@ const Post = () => {
       )}
 
       {!error && isDataPresent ? (
-        <button className="btn btn-success mx-1" onClick={downloadExcel}>
+        <button
+          className="btn btn-success mx-1"
+          disabled={isLoading}
+          onClick={downloadExcel}
+        >
           Download In Excel
         </button>
       ) : !error && !isDataPresent ? (
-        <button className="btn btn-light mx-1" onClick={addBulk}>
+        <button
+          className="btn btn-light mx-1"
+          disabled={isLoading}
+          onClick={addBulk}
+        >
           Bulk Add
         </button>
       ) : null}
