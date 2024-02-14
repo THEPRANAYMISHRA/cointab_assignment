@@ -1,4 +1,3 @@
-```markdown
 # Coin Tab Assignment
 
 Welcome to Coin Tab Assignment! This project serves as a web tool for managing and maintaining user data and their posts.
