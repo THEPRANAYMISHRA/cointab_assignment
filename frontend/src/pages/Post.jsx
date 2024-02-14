@@ -9,6 +9,7 @@ const Post = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDataPresent, setIsDataPresent] = useState(true);
   const [error, setError] = useState(null);
+  const [alert, setAlert] = useState(false);
   const [userId] = useState(id);
 
   const fetchPosts = async () => {
@@ -20,11 +21,11 @@ const Post = () => {
       const value = await axios.get(
         `http://localhost:4500/check/?id=${userId}`
       );
-      setIsDataPresent(value?.status === 200 ? true : false);
+      setIsDataPresent(value.data);
       setData(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
@@ -35,6 +36,7 @@ const Post = () => {
       let payload = { userId: userId, posts: data };
       let res = await axios.post("http://localhost:4500/add", payload);
       console.log(res.data);
+      setAlert(true);
     } catch (error) {
       console.log(error);
       setError(error);
@@ -79,20 +81,48 @@ const Post = () => {
 
   return (
     <div className="overflow-auto p-2" style={{ height: "100%" }}>
-      {isDataPresent ? (
+      {error && (
+        <div
+          className="alert alert-danger alert-dismissible fade show w-100"
+          role="alert"
+        >
+          <strong>Alert!</strong> {error}
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+      )}
+      {alert && (
+        <div
+          className="alert alert-success alert-dismissible fade show w-100"
+          role="alert"
+        >
+          <strong>Alert!</strong>Data uploaded successfully
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+            onClick={() => setAlert(false)}
+          ></button>
+        </div>
+      )}
+
+      {!error && isDataPresent ? (
         <button className="btn btn-success mx-1" onClick={downloadExcel}>
           Download In Excel
         </button>
-      ) : (
+      ) : !error && !isDataPresent ? (
         <button className="btn btn-light mx-1" onClick={addBulk}>
           Bulk Add
         </button>
-      )}
+      ) : null}
 
       {isLoading ? (
         <h3 className="text-light">Loading...</h3>
-      ) : error ? (
-        <h3 className="text-light">Error: {error}</h3>
       ) : (
         data.map((post) => (
           <div className="card w-100 my-1" key={post.id}>

@@ -48,7 +48,7 @@ app.get("/check", (req, res) => {
     let sql = `SELECT * FROM posts WHERE userid=${id}`;
     conn.query(sql, (err, result) => {
         if (!result?.length) {
-            return res.status(404).send(false);
+            return res.status(200).send(false);
         } else {
             return res.status(200).send(true);
         }
