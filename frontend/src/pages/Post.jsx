@@ -11,6 +11,7 @@ const Post = () => {
   const [error, setError] = useState(null);
   const [alert, setAlert] = useState(false);
   const [userId] = useState(id);
+  const baseUrl = "https://cointab-5uh7.onrender.com";
 
   const fetchPosts = async () => {
     try {
@@ -18,9 +19,7 @@ const Post = () => {
       const res = await axios.get(
         `https://jsonplaceholder.typicode.com/posts?userId=${userId}`
       );
-      const value = await axios.get(
-        `http://localhost:4500/check/?id=${userId}`
-      );
+      const value = await axios.get(`${baseUrl}/check/?id=${userId}`);
       setIsDataPresent(value.data);
       setData(res.data);
     } catch (error) {
@@ -34,7 +33,7 @@ const Post = () => {
   const addBulk = async () => {
     try {
       let payload = { userId: userId, posts: data };
-      let res = await axios.post("http://localhost:4500/add", payload);
+      let res = await axios.post(baseUrl, payload);
       console.log(res.data);
       setAlert(true);
     } catch (error) {
@@ -45,10 +44,9 @@ const Post = () => {
 
   const downloadExcel = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4500/download/?userId=${userId}`,
-        { responseType: "blob" }
-      );
+      const res = await axios.get(`${baseUrl}/download/?userId=${userId}`, {
+        responseType: "blob",
+      });
       if (res.status === 200) {
         const blob = new Blob([res.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

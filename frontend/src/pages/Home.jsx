@@ -8,12 +8,13 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
+  const baseUrl = "https://cointab-5uh7.onrender.com";
 
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
       const res = await axios.get("https://jsonplaceholder.typicode.com/users");
-      const results = await axios.get("http://localhost:4500");
+      const results = await axios.get(baseUrl);
 
       const resultEmails = results.data.map((user) => user.email);
 
@@ -34,7 +35,7 @@ const Home = () => {
 
   const handleSaveToDataBase = async (ele) => {
     try {
-      let res = await axios.post("http://localhost:4500", ele);
+      let res = await axios.post(baseUrl, ele);
       setAlert(true);
       fetchUsers();
       return console.log(res);
