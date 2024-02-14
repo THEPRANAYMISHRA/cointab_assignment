@@ -36,6 +36,7 @@ const Post = () => {
       let res = await axios.post(`${baseUrl}/add`, payload);
       console.log(res);
       setAlert(true);
+      fetchPosts();
     } catch (error) {
       console.log(error);
       setError(error);
