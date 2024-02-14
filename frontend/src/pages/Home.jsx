@@ -15,8 +15,7 @@ const Home = () => {
       setIsLoading(true);
       const res = await axios.get("https://jsonplaceholder.typicode.com/users");
       const results = await axios.get(baseUrl);
-
-      const resultEmails = results.data.map((user) => user.email);
+      const resultEmails = results?.data.map((user) => user.email);
 
       const newData = res.data.map((user) => {
         if (resultEmails.includes(user.email)) {

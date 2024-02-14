@@ -9,12 +9,6 @@ const worksheet = workbook.addWorksheet("Posts");
 app.use(express.json());
 app.use(cors());
 
-// connection for database 
-conn.connect((err) => {
-    if (err) throw err;
-    console.log('Connected to the Database');
-});
-
 app.get("/", (req, res) => {
     conn.query("SELECT * FROM employees", (err, result) => {
         if (err) {
