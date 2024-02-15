@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Home = () => {
-  const [data, setData] = useState([]);
+  const { data, setData, setCurrentUser } = useContext(UserContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [alert, setAlert] = useState(false);
@@ -14,7 +16,7 @@ const Home = () => {
     try {
       setIsLoading(true);
       const res = await axios.get("https://jsonplaceholder.typicode.com/users");
-      const results = await axios.get(baseUrl);
+      const results = await axios.get(`${baseUrl}/users/`);
       const resultEmails = results?.data.map((user) => user.email);
 
       const newData = res.data.map((user) => {
@@ -34,7 +36,7 @@ const Home = () => {
 
   const handleSaveToDataBase = async (ele) => {
     try {
-      let res = await axios.post(baseUrl, ele);
+      let res = await axios.post(`${baseUrl}/users/`, ele);
       setAlert(true);
       fetchUsers();
       return console.log(res);
@@ -44,11 +46,12 @@ const Home = () => {
   };
 
   const handleShowUser = (id) => {
-    navigate(`/post/?userId=${id}`);
+    setCurrentUser(id);
+    navigate(`/postpage`);
   };
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center h-auto gap-1">
+    <div className="d-flex flex-column align-items-start justify-content-center h-auto gap-1 p-3">
       {error && (
         <div
           className="alert alert-danger alert-dismissible fade show w-100"
@@ -79,14 +82,14 @@ const Home = () => {
         </div>
       )}
       <button
-        className="btn btn-warning w-100 mt-1"
+        className="btn btn-light my-1"
         disabled={isLoading}
         onClick={fetchUsers}
       >
         {isLoading ? "wait.." : "All users"}
       </button>
       <table
-        className="table w-100 overflow-scroll"
+        className={data.length ? "table w-100 overflow-scroll" : "d-none"}
         style={{ maxWidth: "100%", height: "100%" }}
       >
         <thead>

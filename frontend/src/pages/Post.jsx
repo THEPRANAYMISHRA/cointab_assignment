@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 const Post = () => {
-  const urlSearchString = window.location.search;
-  const params = new URLSearchParams(urlSearchString);
-  const id = params.get("userId");
+  const { currentUser } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDataPresent, setIsDataPresent] = useState(false);
   const [error, setError] = useState(null);
   const [alert, setAlert] = useState(false);
-  const [userId] = useState(id);
   const baseUrl = "https://cointab-5uh7.onrender.com";
 
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `https://jsonplaceholder.typicode.com/posts?userId=${userId}`
+        `https://jsonplaceholder.typicode.com/posts?userId=${currentUser}`
       );
-      const value = await axios.get(`${baseUrl}/check/?id=${userId}`);
+      const value = await axios.get(
+        `${baseUrl}/posts/check/?id=${currentUser}`
+      );
       setIsDataPresent(value.data);
       setData(res.data);
     } catch (error) {
@@ -32,8 +32,8 @@ const Post = () => {
 
   const addBulk = async () => {
     try {
-      let payload = { userId: userId, posts: data };
-      let res = await axios.post(`${baseUrl}/add`, payload);
+      let payload = { userId: currentUser, posts: data };
+      let res = await axios.post(`${baseUrl}/posts/add`, payload);
       console.log(res);
       setAlert(true);
       fetchPosts();
@@ -45,9 +45,12 @@ const Post = () => {
 
   const downloadExcel = async () => {
     try {
-      const res = await axios.get(`${baseUrl}/download/?userId=${userId}`, {
-        responseType: "blob",
-      });
+      const res = await axios.get(
+        `${baseUrl}/posts/download/?userId=${currentUser}`,
+        {
+          responseType: "blob",
+        }
+      );
       if (res.status === 200) {
         const blob = new Blob([res.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -79,7 +82,7 @@ const Post = () => {
   }, []);
 
   return (
-    <div className="overflow-auto p-2" style={{ height: "100%" }}>
+    <div className="p-2 h-auto">
       {error && (
         <div
           className="alert alert-danger alert-dismissible fade show w-100"
