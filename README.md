@@ -29,10 +29,10 @@ In this project, users can view user data in tabular form, add specific user dat
 
 | Route   | Method | Description                          |
 |---------|--------|--------------------------------------|
-| /       | GET    | Retrieve users from the database     |
-| /       | POST   | Add a user to the database           |
-| /add    | POST   | Add posts of the user to the database|
-| /download | GET  | Download user's posts in Excel format|
+| /users/       | GET    | Retrieve users from the database     |
+| /users/       | POST   | Add a user to the database           |
+| /posts/add    | POST   | Add posts of the user to the database|
+| /posts/download | GET  | Download user's posts in Excel format|
 
 ## Screenshots
 ### Home Page
