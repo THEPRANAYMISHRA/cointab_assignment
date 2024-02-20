@@ -45,8 +45,9 @@ const Post = () => {
 
   const downloadExcel = async () => {
     try {
-      const res = await axios.get(
-        `${baseUrl}/posts/download/?userId=${currentUser}`,
+      const res = await axios.post(
+        `${baseUrl}/posts/download/`,
+        { userId: currentUser, company: "ABC" },
         {
           responseType: "blob",
         }

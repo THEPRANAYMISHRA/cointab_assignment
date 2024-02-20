@@ -6,6 +6,6 @@ postRouter.get("/check", checkUserPosts)
 
 postRouter.post("/add", addBulk);
 
-postRouter.get("/download", downloadExcel);
+postRouter.post("/download", downloadExcel);
 
 module.exports = { postRouter }

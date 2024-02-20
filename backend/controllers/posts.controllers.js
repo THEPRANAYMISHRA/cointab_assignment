@@ -23,7 +23,8 @@ const checkUserPosts = (req, res) => {
 }
 
 const downloadExcel = (req, res) => {
-    const { userId } = req.query;
+    const { userId, company } = req.body;
+
 
     let sql = `SELECT * FROM posts WHERE userid=?`;
 
@@ -44,7 +45,7 @@ const downloadExcel = (req, res) => {
                     uid: post.userid,
                     name: post.name,
                     title: post.title,
-                    company: post.company,
+                    company: company,
                     body: post.body
                 }));
 
